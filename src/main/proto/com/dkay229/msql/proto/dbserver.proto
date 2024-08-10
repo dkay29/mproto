@@ -12,11 +12,61 @@ message QueryRequest {
     string sql = 1;
 }
 
+message SampleRequest {
+    string sql = 1;
+}
+
 message QueryResponse {
     repeated string rows = 1;
 }
 
+message SampleMessage {
+    // Scalar Types
+    int32 my_int32 = 1;
+    int64 my_int64 = 2;
+    uint32 my_uint32 = 3;
+    uint64 my_uint64 = 4;
+    sint32 my_sint32 = 5;
+    sint64 my_sint64 = 6;
+    fixed32 my_fixed32 = 7;
+    fixed64 my_fixed64 = 8;
+    sfixed32 my_sfixed32 = 9;
+    sfixed64 my_sfixed64 = 10;
+    float my_float = 11;
+    double my_double = 12;
+    bool my_bool = 13;
+    string my_string = 14;
+    bytes my_bytes = 15;
+
+    // Enums
+    enum MyEnum {
+        UNKNOWN = 0;
+        OPTION_ONE = 1;
+        OPTION_TWO = 2;
+    }
+    MyEnum my_enum = 16;
+
+    // Nested Message
+    message NestedMessage {
+        string nested_field = 1;
+    }
+    NestedMessage my_nested_message = 17;
+
+    // Repeated Fields
+    repeated int32 my_repeated_int32 = 18;
+    repeated string my_repeated_string = 19;
+
+    // Map Fields
+    map<string, int32> my_map_field = 20;
+
+    // Oneof (only one of these fields can be set at a time)
+    oneof my_oneof {
+        string my_oneof_string = 21;
+        int32 my_oneof_int32 = 22;
+    }
+}
 service DatabaseService {
     rpc ExecuteQuery(QueryRequest) returns (QueryResponse);
     rpc GetUser(User) returns (User);
+    rpc GetRandomSampleMessage(SampleRequest) returns (SampleMessage);
 }
