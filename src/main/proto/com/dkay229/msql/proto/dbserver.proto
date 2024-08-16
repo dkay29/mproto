@@ -8,6 +8,16 @@ message User {
     string email = 3;
 }
 
+message LoginRequest {
+    string userId =1;
+    string token = 2;
+}
+
+message Connection {
+    string connectionId = 1;
+    string errorMessage = 2 ;
+}
+
 message QueryRequest {
     string sql = 1;
 }
@@ -66,6 +76,7 @@ message SampleMessage {
     }
 }
 service DatabaseService {
+    rpc Login(LoginRequest) returns (Connection);
     rpc ExecuteQuery(QueryRequest) returns (QueryResponse);
     rpc GetUser(User) returns (User);
     rpc GetRandomSampleMessage(SampleRequest) returns (SampleMessage);
