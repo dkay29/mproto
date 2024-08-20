@@ -37,7 +37,7 @@ message ColumnMetadata {
      }
     string name = 1;
     TypeEnum type = 2;
-    string size = 3;
+    int32 size = 3;
 }
 message RowMetadata {
     repeated ColumnMetadata columns = 1;
