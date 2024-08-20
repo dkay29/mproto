@@ -13,20 +13,60 @@ message LoginRequest {
     string token = 2;
 }
 
+message LoginResponse {
+    int64 connectionId = 1;
+    int64 connectionKey = 2;
+    string errorMessage = 3
+     ;
+}
+
 message Connection {
-    string connectionId = 1;
-    string errorMessage = 2 ;
+    int64 connectionId = 1;
+    int64 connectionKey = 2;
 }
 
-message QueryRequest {
+
+message ColumnMetadata {
+    enum TypeEnum {
+         STRING = 0;
+         FLOAT = 1;
+         DATE = 2;
+         INTEGER = 3;
+         BOOLEAN = 4;
+         VECTOR = 5;
+     }
+    string name = 1;
+    TypeEnum type = 2;
+    string size = 3;
+}
+message RowMetadata {
+    repeated ColumnMetadata columns = 1;
+}
+message Row {
+    repeated string values = 1;
+}
+message ExecuteQueryRequest {
     string sql = 1;
 }
-
-message SampleRequest {
+message ExecuteQueryResponse {
+    int32 statusCode =1;
+    string errorMessage = 2;
+    RowMetadata rowMetadata = 3;
+}
+message ResultRowsRequest {
+    Connection connection = 1;
+    int32 notMoreThanRowCount = 2;
+}
+message ResultRowsResponse {
+    repeated Row rows = 1;
+}
+message CloseResultsRequest {
+    Connection connection = 1;
+}
+message ExecuteUpdate {
     string sql = 1;
 }
-
-message QueryResponse {
+message UpdateResponse {
     repeated string rows = 1;
 }
 
@@ -76,8 +116,8 @@ message SampleMessage {
     }
 }
 service DatabaseService {
-    rpc Login(LoginRequest) returns (Connection);
-    rpc ExecuteQuery(QueryRequest) returns (QueryResponse);
-    rpc GetUser(User) returns (User);
-    rpc GetRandomSampleMessage(SampleRequest) returns (SampleMessage);
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc ExecuteQuery(ExecuteQueryRequest) returns (ExecuteQueryResponse);
+    rpc FetchResultRows(ResultRowsRequest) returns (ResultRowsResponse);
+    rpc CloseResults(CloseResultsRequest) returns (Connection);
 }
